@@ -1,6 +1,5 @@
 package ui;
 
-import Model.MedManager;
 import Model.Medication;
 
 import javax.swing.*;
@@ -16,8 +15,6 @@ public class SimpleGUI {
 
     private static SimpleGUI instance;
     private JFrame frame;
-
-    private MedicationsGUI medicationsGui;
 
     public JTabbedPane tabbedPane;
 
@@ -61,7 +58,8 @@ public class SimpleGUI {
         return instance;
     }
 
-    //Runs medApp GUI
+    // Launches main medApp GUI
+
     public static void main(String[] args) {
         SimpleGUI gui = new SimpleGUI();
         instance = gui;
@@ -72,7 +70,8 @@ public class SimpleGUI {
         this.frame = new JFrame();
         }
 
-        //Sets up Main GUI
+        // Sets up main GUI
+
         public void go(){
         tabbedPane = new JTabbedPane();
         storeButton = new JButton("Save Medication");
@@ -137,7 +136,6 @@ public class SimpleGUI {
 
        frame.getContentPane().add(BorderLayout.CENTER, tabbedPane);
        tabbedPane.addTab("Add Medication",panel);
-       medicationsGui = MedicationsGUI.getInstance();
 
        storeButton.addActionListener(new StoreListener());
        addTimesButton.addActionListener(new MoreTimeListener());
@@ -149,6 +147,7 @@ public class SimpleGUI {
     }
 
     //Refreshes GUI
+
     public void reCast(){
         panelExtraTimes.removeAll();
         panelExtraTimes.repaint();
@@ -172,6 +171,7 @@ public class SimpleGUI {
     }
 
     //Adds time capacity to GUI
+
     public void addTimes() {
         String[] hourEntries = new String[13];
 
@@ -228,10 +228,17 @@ public class SimpleGUI {
         panelExtraTimes.add(panelTimes);
         frame.pack();
     }
+
     //Returns JFrame
+
     public JFrame getFrame(){
             return this.frame;
     }
+
+
+    // Stores entered information entered into fields into a Medication object
+    // loads Medication object onto MedicationsGUI and refreshes the main GUI
+
 
     class StoreListener implements ActionListener {
 
@@ -266,12 +273,12 @@ public class SimpleGUI {
                 System.out.println("Hours: " + hour);}
 
             System.out.println("Size: " + hourLists.size());
-
-            MedManager.getInstance().addMed(medication);
-            medicationsGui.loadMeds();
+            MedicationsGUI.getInstance().loadMeds();
             reCast();
         }
     }
+
+    // Adds additional times to Main GUI
 
     class MoreTimeListener implements ActionListener {
 
@@ -282,6 +289,8 @@ public class SimpleGUI {
         }
     }
 
+    // Removes additional times from Main GUI
+
     class RemoveTimeListener implements ActionListener {
 
         @Override
@@ -289,8 +298,6 @@ public class SimpleGUI {
             frame.setSize(new Dimension(frame.getWidth(), frame.getHeight() - 150));
             removeTimes();
             frame.pack();
-
-
         }
     }
 

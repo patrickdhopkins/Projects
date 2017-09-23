@@ -12,6 +12,7 @@ public class MedicationTime  {
     private int militaryTime;
     private int medMinute;
     private String medAmOrPm;
+    private Medication medication;
     private int dose;
     private int numberOfPills;
     private Notification notification;
@@ -19,14 +20,15 @@ public class MedicationTime  {
 
 
 
-    public MedicationTime(String name, int dose, int numberOfPills, int hour, int minute, String amOrPm){
+    public MedicationTime(Medication medication, int hour, int minute, String amOrPm){
         this.medHour = hour;
         this.militaryTime = hour + afternoonDecide(amOrPm, hour);
         this.medMinute = minute;
         this.medAmOrPm = amOrPm;
-        this.notification = new Notification(name, dose, hour, minute, amOrPm);
-        this.dose = dose;
-        this.numberOfPills = numberOfPills;
+        this.medication = medication;
+        this.notification = new Notification(medication, hour, minute, amOrPm);
+        this.dose = this.medication.getPills();
+        this.numberOfPills = this.medication.getNumberOfPills();
         this.schedulers = new ArrayList<>();
         scheduleMedication();
     }

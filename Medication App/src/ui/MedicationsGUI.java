@@ -14,16 +14,17 @@ import java.util.HashMap;
 public class MedicationsGUI {
 
     private static MedicationsGUI instance;
-    private ArrayList<Medication> meds;
 
     public JPanel panel;
 
     private HashMap<JButton, Medication> buttonMedicationHashmap;
 
     private MedicationsGUI() {
-        this.meds = MedManager.getInstance().getMeds();
+
         loadMeds();
     }
+
+    // Calls an instance of MedicationsGUI
 
     public static MedicationsGUI getInstance() {
         if(instance == null) {
@@ -31,19 +32,26 @@ public class MedicationsGUI {
         return instance;
     }
 
+    // Sets up Medications GUI, loads Medications stored in MedManager onto GUI
+
     public void loadMeds() {
         this.panel = new JPanel();
 
         buttonMedicationHashmap = new HashMap<>();
 
-
-        for(Medication med : this.meds) {
+        for(Medication med : MedManager.getInstance().getMeds()) {
 
             String name = med.getName();
             JLabel nameLabel = new JLabel(name);
+            Font fontBold = new Font("Courier", Font.BOLD,14);
+            nameLabel.setFont(fontBold);
+
+            String pillsLeft = med.getNumberOfPills() + " Pills Left";
+            JLabel pillsLeftLabel = new JLabel(pillsLeft);
+
 
             int dose = med.getPills();
-            JLabel doseLabel = new JLabel(dose + " pills");
+            JLabel doseLabel = new JLabel(dose + " Pill(s)");
 
             ArrayList<MedicationTime> medTimes = med.getMedTimes();
 
@@ -52,6 +60,7 @@ public class MedicationsGUI {
 
             medPanel.add(nameLabel);
             medPanel.add(doseLabel);
+            medPanel.add(pillsLeftLabel);
 
             JButton removeMedButton = new JButton("Remove " + med.getName());
             removeMedButton.addActionListener(new RemoveMedicationListener());
@@ -90,6 +99,8 @@ public class MedicationsGUI {
         SimpleGUI.getInstance().getFrame().pack();
     }
 
+    // Removes Medication from GUI and MedManager
+
     public class RemoveMedicationListener implements ActionListener {
 
         @Override
@@ -98,7 +109,7 @@ public class MedicationsGUI {
             Medication medRemoved = buttonMedicationHashmap.get(buttonPressed);
 
             buttonMedicationHashmap.remove(buttonPressed);
-            meds.remove(medRemoved);
+            MedManager.getInstance().removeMed(medRemoved);
             loadMeds();
         }
     }
